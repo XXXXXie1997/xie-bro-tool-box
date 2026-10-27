@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0-windows</TargetFramework><UseWPF>true</UseWPF><AssemblyName>XieBox.Platform.Tests</AssemblyName></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../XieBox.csproj" /></ItemGroup>
+</Project>

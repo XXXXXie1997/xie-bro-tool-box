@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>Resources/app.ico</ApplicationIcon>
+    <AssemblyName>XieBroToolBox</AssemblyName>
+    <Product>XieBroToolBox</Product>
+    <Title>XieBroToolBox</Title>
+    <Version>1.2</Version>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
+    <InformationalVersion>1.2</InformationalVersion>
+    <RootNamespace>XieBox</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <DefaultItemExcludes>$(DefaultItemExcludes);backend/**;tools/**;tests/**;Contracts/**;Platform.UI/**;artifacts/**</DefaultItemExcludes>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(PortableRelease)' == 'true'">
+    <DefineConstants>$(DefineConstants);PORTABLE_RELEASE</DefineConstants>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+    <SelfContained>true</SelfContained>
+    <PublishTrimmed>false</PublishTrimmed>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="scripts/OfflineLauncher.cs" /><Compile Remove="scripts/installer/**/*.cs" />
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+    <Resource Include="Resources/app.ico" />
+    <Resource Include="Resources/logo.png" />
+    <Resource Include="Resources/logo-dark.png" />
+    <Resource Include="Resources/Support/*.png" />
+    <ProjectReference Include="tools/health-check/src/XieBox.HealthCheck.csproj" />
+    <ProjectReference Include="tools/hardware-check/src/XieBox.HardwareCheck.csproj" />
+    <ProjectReference Include="Contracts/XieBox.Contracts.csproj" />
+    <ProjectReference Include="Platform.UI/XieBox.Platform.UI.csproj" />
+    <ProjectReference Include="tools/garbage-cleaner/src/XieBox.GarbageCleaner.csproj" />
+    <ProjectReference Include="tools/file-scanner/src/XieBox.FileScanner.csproj" />
+    <ProjectReference Include="tools/startup-manager/src/XieBox.StartupManager.csproj" />
+    <ProjectReference Include="tools/memory-release/src/XieBox.MemoryRelease.csproj" />
+    <ProjectReference Include="tools/disk-analyzer/src/XieBox.DiskAnalyzer.csproj" />
+    <ProjectReference Include="tools/software-uninstaller/src/XieBox.SoftwareUninstaller.csproj" />
+    <ProjectReference Include="tools/batch-renamer/src/XieBox.BatchRenamer.csproj" />
+    <ProjectReference Include="tools/file-organizer/src/XieBox.FileOrganizer.csproj" />
+    <ProjectReference Include="tools/network-diagnostics/src/XieBox.NetworkDiagnostics.csproj" />
+    <None Update="platformsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Resources/catalog.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Resources/ThirdParty/**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
+
+
+

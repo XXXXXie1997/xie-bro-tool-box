@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="XieBox.FileScanner.ScannerView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ui="clr-namespace:XieBox.Platform.UI;assembly=XieBox.Platform.UI">
+  <UserControl.Resources><BooleanToVisibilityConverter x:Key="Visible" /></UserControl.Resources>
+  <Grid Margin="24,16,24,12">
+    <ScrollViewer x:Name="Setup" VerticalAlignment="Center" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Width="560" HorizontalAlignment="Center" Margin="0,24">
+        <TextBlock Text="文件扫描" FontSize="34" FontWeight="SemiBold" TextAlignment="Center" />
+        <TextBlock Text="按文件大小或格式扫描指定目录。" Style="{StaticResource MutedText}" TextAlignment="Center" Margin="0,12,0,32" />
+        <TextBlock Text="扫描目录" FontSize="13" Margin="0,0,0,8" />
+        <ui:DirectoryDropZone x:Name="DirectoryPicker" SelectedPath="{Binding Directory, Mode=TwoWay}" IsEnabled="{Binding IsIdle}" />
+        <Grid Margin="0,22,0,18"><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition /><ColumnDefinition /></Grid.ColumnDefinitions>
+          <Button Content="大文件扫描" Click="Large_Click" FocusVisualStyle="{x:Null}" Margin="0,0,6,0"><Button.Style><Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}"><Style.Triggers><DataTrigger Binding="{Binding LargeFiles}" Value="True"><Setter Property="Background" Value="{DynamicResource AccentBrush}" /><Setter Property="BorderBrush" Value="{DynamicResource AccentInkBrush}" /><Setter Property="FontWeight" Value="SemiBold" /></DataTrigger></Style.Triggers></Style></Button.Style></Button>
+          <Button Grid.Column="1" Content="特定格式扫描" Click="Formats_Click" FocusVisualStyle="{x:Null}" Margin="6,0,0,0"><Button.Style><Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}"><Style.Triggers><DataTrigger Binding="{Binding FormatMode}" Value="True"><Setter Property="Background" Value="{DynamicResource AccentBrush}" /><Setter Property="BorderBrush" Value="{DynamicResource AccentInkBrush}" /><Setter Property="FontWeight" Value="SemiBold" /></DataTrigger></Style.Triggers></Style></Button.Style></Button>
+        <Button Grid.Column="2" Content="重复文件扫描" Click="Duplicates_Click" Margin="6,0,0,0"><Button.Style><Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}"><Style.Triggers><DataTrigger Binding="{Binding Duplicates}" Value="True"><Setter Property="Background" Value="{DynamicResource AccentBrush}" /><Setter Property="BorderBrush" Value="{DynamicResource AccentInkBrush}" /></DataTrigger></Style.Triggers></Style></Button.Style></Button>
+        </Grid>
+
+        <Border Background="{DynamicResource SoftBrush}" CornerRadius="12" Padding="20">
+<Grid MinHeight="108"><TextBlock Text="{Binding DuplicateHint}" Style="{StaticResource MutedText}" Visibility="{Binding Duplicates, Converter={StaticResource Visible}}" />
+            <StackPanel Visibility="{Binding LargeFiles, Converter={StaticResource Visible}}">
+              <StackPanel Orientation="Horizontal"><TextBlock Text="文件大小超过" VerticalAlignment="Center" /><TextBox Text="{Binding Threshold, UpdateSourceTrigger=PropertyChanged}" Width="100" Margin="12,0" MaxLength="9" AutomationProperties.Name="大小阈值，单位 MB" /><TextBlock Text="MB" VerticalAlignment="Center" /></StackPanel>
+              <TextBlock Text="默认 100 MB，最低 50 MB。" Style="{StaticResource MutedText}" FontSize="12" Margin="0,12,0,0" />
+            </StackPanel>
+            <StackPanel Visibility="{Binding FormatMode, Converter={StaticResource Visible}}">
+              <TextBlock Text="选择文件类型（可多选）" FontSize="13" Margin="0,0,0,16" />
+              <ItemsControl ItemsSource="{Binding Formats}"><ItemsControl.ItemsPanel><ItemsPanelTemplate><UniformGrid Columns="4" /></ItemsPanelTemplate></ItemsControl.ItemsPanel><ItemsControl.ItemTemplate><DataTemplate><CheckBox Content="{Binding Name}" IsChecked="{Binding Selected}" ToolTip="{Binding Hint}" /></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+              <TextBlock Text="自定义文件类型" FontSize="13" Margin="0,16,0,8" />
+              <Grid>
+                <TextBox x:Name="CustomFormatsInput" Text="{Binding CustomExtensions, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="自定义文件格式" IsEnabled="{Binding IsIdle}" />
+                <TextBlock Text="例如：jpg png zip" Margin="12,0" VerticalAlignment="Center" IsHitTestVisible="False" Foreground="{DynamicResource MutedBrush}">
+                  <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding Text, ElementName=CustomFormatsInput}" Value=""><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                </TextBlock>
+              </Grid>
+              <TextBlock Text="填写扩展名，用空格分隔。可与上方类型一起选择，重复格式会自动合并。" Style="{StaticResource MutedText}" FontSize="12" Margin="0,10,0,0" />
+            </StackPanel>
+          </Grid>
+        </Border>
+        <Button Content="开始扫描" Click="Scan_Click" Style="{StaticResource PrimaryButton}" Width="200" Height="54" FontSize="18" Margin="0,24,0,0" IsEnabled="{Binding IsIdle}" />
+        <TextBlock Text="{Binding Status}" Style="{StaticResource StatusText}" TextAlignment="Center" Margin="0,12,0,0" />
+      </StackPanel>
+    </ScrollViewer>
+    <Grid x:Name="Results" Visibility="Collapsed">
+      <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+      <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+        <StackPanel><TextBlock Text="文件扫描" FontSize="22" FontWeight="SemiBold" /><TextBlock Text="{Binding Summary}" Style="{StaticResource MutedText}" Margin="0,4,0,0" /></StackPanel>
+        <StackPanel Grid.Column="1" Margin="30,0" VerticalAlignment="Center" Visibility="{Binding IsBusy, Converter={StaticResource Visible}}"><TextBlock Text="{Binding Status}" Style="{StaticResource StatusText}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" FontSize="12" Margin="0,0,0,8" /><ProgressBar Height="4" IsIndeterminate="{Binding IsBusy}" Foreground="{DynamicResource AccentInkBrush}" Background="{DynamicResource AccentBrush}" /></StackPanel>
+        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center"><Button Content="调整条件" Click="Edit_Click" Style="{StaticResource FlatButton}" IsEnabled="{Binding IsIdle}" Margin="0,0,10,0" /><Button Content="再次扫描" Click="Scan_Click" Style="{StaticResource PrimaryButton}" IsEnabled="{Binding IsIdle}" /><Button Content="停止" Click="Stop_Click" Style="{StaticResource FlatButton}" Visibility="{Binding IsBusy, Converter={StaticResource Visible}}" Margin="8,0,0,0" /></StackPanel>
+      </Grid>
+      <TextBlock Grid.Row="1" Text="{Binding Directory}" ToolTip="{Binding Directory}" Style="{StaticResource MutedText}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="0,22,0,14" />
+      <DataGrid Grid.Row="2" x:Name="FilesTable" ItemsSource="{Binding Files}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single">
+        <DataGrid.Columns>
+          <DataGridTextColumn x:Name="GroupColumn" Header="重复组" Binding="{Binding Group}" Width="100" ElementStyle="{StaticResource TableText}" Visibility="Collapsed" />
+          <DataGridTextColumn Header="文件名" Binding="{Binding Name}" Width="210" ElementStyle="{StaticResource TableText}" />
+          <DataGridTextColumn Header="文件路径" Binding="{Binding Path}" Width="*" ElementStyle="{StaticResource TableText}" />
+          <DataGridTextColumn Header="大小" Binding="{Binding Size}" SortMemberPath="Bytes" Width="110" ElementStyle="{StaticResource TableSize}" />
+          <DataGridTextColumn Header="类型" Binding="{Binding Type}" Width="80" ElementStyle="{StaticResource TableText}" />
+          <DataGridTemplateColumn Header="" Width="100"><DataGridTemplateColumn.CellTemplate><DataTemplate><Button Content="打开位置" Tag="{Binding Path}" Click="Reveal_Click" Style="{StaticResource FlatButton}" Padding="0,4" FontSize="12" /></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+      <Grid Grid.Row="3" Margin="0,8,0,0"><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions><TextBlock Text="{Binding Status}" Style="{StaticResource StatusText}" FontSize="12" Margin="0,0,16,0" /><TextBlock Grid.Column="1" Text="{Binding ResultCount}" FontSize="13" VerticalAlignment="Center" /></Grid>
+    </Grid>
+  </Grid>
+</UserControl>
+
+
+
+

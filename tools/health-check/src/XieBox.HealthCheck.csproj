@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFramework>net10.0-windows</TargetFramework><UseWPF>true</UseWPF><AssemblyName>XieBox.HealthCheck</AssemblyName></PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Management" Version="10.0.0" />
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="DirectShowLib.Standard" Version="2.1.0" />
+    <ProjectReference Include="../../../Contracts/XieBox.Contracts.csproj" />
+    <ProjectReference Include="../../../Platform.UI/XieBox.Platform.UI.csproj" />
+    <ProjectReference Include="../../garbage-cleaner/src/XieBox.GarbageCleaner.csproj" />
+    <ProjectReference Include="../../startup-manager/src/XieBox.StartupManager.csproj" />
+    <ProjectReference Include="../../memory-release/src/XieBox.MemoryRelease.csproj" />
+    <ProjectReference Include="../../network-diagnostics/src/XieBox.NetworkDiagnostics.csproj" />
+  </ItemGroup>
+</Project>

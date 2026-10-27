@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Duration x:Key="Motion.FeedbackDuration">0:0:0.14</Duration>
+  <Duration x:Key="Motion.EnterDuration">0:0:0.26</Duration>
+  <Duration x:Key="Motion.LayoutDuration">0:0:0.44</Duration>
+  <CubicEase x:Key="Motion.EaseOut" EasingMode="EaseOut" />
+  <Storyboard x:Key="Motion.Enter">
+    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="{StaticResource Motion.EnterDuration}" />
+    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" From="12" To="0" Duration="{StaticResource Motion.EnterDuration}" EasingFunction="{StaticResource Motion.EaseOut}" />
+  </Storyboard>
+</ResourceDictionary>

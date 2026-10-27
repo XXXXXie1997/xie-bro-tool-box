@@ -1,0 +1,73 @@
+Hardware-check dependencies are used without source modifications. Their licenses and source locations follow. The application itself is a separate work.
+
+BlackSharp.Core/1.0.7
+Copyright: Florian K.
+License: MPL-2.0
+Project: https://github.com/Blacktempel/BlackSharp
+Source: https://github.com/Blacktempel/BlackSharp
+Revision: c70b735c6cec123ee8a046ac4a0bc6c606f52cf0
+License URL: https://licenses.nuget.org/MPL-2.0
+
+DiskInfoToolkit/1.1.2
+Copyright: Florian K.
+License: MPL-2.0
+Project: https://github.com/Blacktempel/DiskInfoToolkit
+Source: https://github.com/Blacktempel/DiskInfoToolkit
+Revision: 25319eae5781e75bcf141e844ceab2afe94d40ea
+License URL: https://licenses.nuget.org/MPL-2.0
+
+HidSharp/2.6.4
+Copyright: Copyright 2010-2025 James Bellinger
+License: LICENSE.txt
+Project: https://software.seekye.com/hidsharp
+Source: 
+Revision: 
+License URL: https://aka.ms/deprecateLicenseUrl
+
+LibreHardwareMonitorLib/0.9.6
+Copyright: LibreHardwareMonitor
+License: MPL-2.0
+Project: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor
+Source: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor
+Revision: 3d331e3370efb858411f19511373eff65a218701
+License URL: https://licenses.nuget.org/MPL-2.0
+
+Mono.Posix.NETStandard/1.0.0
+Copyright: © Microsoft Corporation. All rights reserved.
+License: 
+Project: https://go.microsoft.com/fwlink/?linkid=869051
+Source: 
+Revision: 
+License URL: https://go.microsoft.com/fwlink/?linkid=869050
+
+RAMSPDToolkit-NDD/1.4.2
+Copyright: Florian K.
+License: MPL-2.0
+Project: https://github.com/Blacktempel/RAMSPDToolkit
+Source: https://github.com/Blacktempel/RAMSPDToolkit
+Revision: 3b47b960e0830fef344624ad5e389675d5f0a1ce
+License URL: https://licenses.nuget.org/MPL-2.0
+
+System.IO.FileSystem.AccessControl/5.0.0
+Copyright: © Microsoft Corporation. All rights reserved.
+License: MIT
+Project: https://github.com/dotnet/runtime
+Source: git://github.com/dotnet/runtime
+Revision: cf258a14b70ad9069470a108f13765e0e5988f51
+License URL: https://licenses.nuget.org/MIT
+
+System.IO.Ports/10.0.3
+Copyright: © Microsoft Corporation. All rights reserved.
+License: MIT
+Project: https://dot.net/
+Source: https://github.com/dotnet/dotnet
+Revision: c2435c3e0f46de784341ac3ed62863ce77e117b4
+License URL: https://licenses.nuget.org/MIT
+
+System.Management/10.0.2
+Copyright: © Microsoft Corporation. All rights reserved.
+License: MIT
+Project: https://dot.net/
+Source: https://github.com/dotnet/dotnet
+Revision: 44525024595742ebe09023abe709df51de65009b
+License URL: https://licenses.nuget.org/MIT

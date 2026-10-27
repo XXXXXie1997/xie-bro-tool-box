@@ -1,0 +1,80 @@
+<UserControl x:Class="XieBox.Views.HomeView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ui="clr-namespace:XieBox.Platform.UI;assembly=XieBox.Platform.UI">
+  <UserControl.Resources>
+    <Style x:Key="AppSection" TargetType="Expander">
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Expander">
+        <StackPanel>
+          <ToggleButton IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" Content="{TemplateBinding Header}" HorizontalContentAlignment="Left" Margin="8,0,8,14" Padding="0,10" FocusVisualStyle="{x:Null}">
+            <ToggleButton.Template><ControlTemplate TargetType="ToggleButton"><Border Background="Transparent" Padding="{TemplateBinding Padding}"><StackPanel Orientation="Horizontal"><TextBlock x:Name="Arrow" Text="›" FontSize="20" RenderTransformOrigin="0.5,0.5" Margin="0,0,10,0"><TextBlock.RenderTransform><RotateTransform Angle="0" /></TextBlock.RenderTransform></TextBlock><ContentPresenter VerticalAlignment="Center" /></StackPanel></Border><ControlTemplate.Triggers><Trigger Property="IsChecked" Value="True"><Setter TargetName="Arrow" Property="RenderTransform"><Setter.Value><RotateTransform Angle="90" /></Setter.Value></Setter></Trigger><Trigger Property="IsMouseOver" Value="True"><Setter Property="Foreground" Value="{DynamicResource AccentInkBrush}" /></Trigger></ControlTemplate.Triggers></ControlTemplate></ToggleButton.Template>
+          </ToggleButton>
+          <ContentPresenter x:Name="Body" Visibility="Collapsed" />
+        </StackPanel>
+        <ControlTemplate.Triggers><Trigger Property="IsExpanded" Value="True"><Setter TargetName="Body" Property="Visibility" Value="Visible" /></Trigger></ControlTemplate.Triggers>
+      </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style x:Key="AppCardButton" TargetType="Button">
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+        <Border x:Name="Surface" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="12" Padding="12,14">
+          <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+        </Border>
+        <ControlTemplate.Triggers>
+          <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Surface" Property="Background" Value="{DynamicResource SoftBrush}" /><Setter TargetName="Surface" Property="BorderBrush" Value="{DynamicResource CardHoverBorderBrush}" /></Trigger>
+          <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Surface" Property="BorderBrush" Value="{DynamicResource AccentInkBrush}" /></Trigger>
+          <Trigger Property="IsPressed" Value="True"><Setter TargetName="Surface" Property="Background" Value="{DynamicResource AccentBrush}" /></Trigger>
+        </ControlTemplate.Triggers>
+      </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <DataTemplate x:Key="AppCard">
+      <Grid Margin="8,0,8,12" Height="96" MouseEnter="Card_MouseEnter" MouseLeave="Card_MouseLeave">
+        <Grid.RenderTransform><TranslateTransform /></Grid.RenderTransform>
+        <Button Tag="{Binding}" Click="Open_Click" Style="{StaticResource AppCardButton}" AutomationProperties.Name="{Binding Name}" ToolTip="{Binding Description}">
+          <Grid>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="40" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+            <Border Width="40" Height="40" CornerRadius="11" Background="{DynamicResource SoftBrush}" VerticalAlignment="Center">
+              <ui:ModuleIcon ModuleId="{Binding Id}" Width="28" Height="28" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+              <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="SemiBold" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="0,0,0,4" />
+              <TextBlock FontSize="12" LineHeight="18" MaxHeight="36" TextTrimming="CharacterEllipsis">
+                <TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource MutedText}">
+                  <Setter Property="Text" Value="{Binding Description}" />
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding Id}" Value="garbage-cleaner"><Setter Property="Text" Value="按需清理临时文件与浏览器缓存。" /></DataTrigger>
+                    <DataTrigger Binding="{Binding Id}" Value="file-organizer"><Setter Property="Text" Value="分类整理桌面与文件夹。" /></DataTrigger>
+                    <DataTrigger Binding="{Binding Id}" Value="app-mover"><Setter Property="Text" Value="为支持的软件迁移安装位置。" /></DataTrigger>
+                  </Style.Triggers>
+                </Style></TextBlock.Style>
+              </TextBlock>
+            </StackPanel>
+          </Grid>
+        </Button>
+
+      </Grid>
+    </DataTemplate>
+  </UserControl.Resources>
+  <Grid Margin="48,0">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Top">
+      <StackPanel MaxWidth="960" Margin="0,24,0,24">
+        <ContentControl x:Name="HealthHost" Margin="8,0,8,20" />
+        <Expander x:Name="FavoritesSection" Header="常用应用" Expanded="Section_Expanded" IsExpanded="{Binding FavoritesExpanded, Mode=TwoWay}" Style="{StaticResource AppSection}" Margin="0,0,0,8">
+          <StackPanel>
+            <TextBlock Text="使用过的应用会显示在这里，最近使用的排在前面。" Margin="8,0,8,20"><TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource MutedText}"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding Favorites.IsEmpty}" Value="True"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style></TextBlock>
+            <ItemsControl x:Name="FavoritesList" ItemsSource="{Binding Favorites}" ItemTemplate="{StaticResource AppCard}"><ItemsControl.ItemsPanel><ItemsPanelTemplate><UniformGrid Columns="4" /></ItemsPanelTemplate></ItemsControl.ItemsPanel></ItemsControl>
+          </StackPanel>
+        </Expander>
+        <Expander x:Name="AllSection" Header="全部应用" Expanded="Section_Expanded" IsExpanded="{Binding AllExpanded, Mode=TwoWay}" Style="{StaticResource AppSection}">
+          <ItemsControl x:Name="ApplicationList" ItemTemplate="{StaticResource AppCard}"><ItemsControl.ItemsPanel><ItemsPanelTemplate><UniformGrid Columns="4" /></ItemsPanelTemplate></ItemsControl.ItemsPanel></ItemsControl>
+        </Expander>
+      </StackPanel>
+    </ScrollViewer>
+
+  </Grid>
+</UserControl>
+
+
+
+
+
+

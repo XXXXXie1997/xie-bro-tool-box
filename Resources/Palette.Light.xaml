@@ -1,0 +1,40 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <SolidColorBrush x:Key="CanvasBrush" Color="#F1F3F6" />
+  <SolidColorBrush x:Key="TitleBarBrush" Color="#E9ECF0" />
+  <SolidColorBrush x:Key="NavigationBrush" Color="#E6EAF0" />
+  <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
+  <SolidColorBrush x:Key="SoftBrush" Color="#EBEFF4" />
+  <SolidColorBrush x:Key="InkBrush" Color="#292D33" />
+  <SolidColorBrush x:Key="MutedBrush" Color="#656B73" />
+  <SolidColorBrush x:Key="LineBrush" Color="#D1D7DF" />
+  <SolidColorBrush x:Key="AccentBrush" Color="#E5DFEF" />
+  <SolidColorBrush x:Key="AccentInkBrush" Color="#685388" />
+  <SolidColorBrush x:Key="HoverBrush" Color="#EAE5F0" />
+  <SolidColorBrush x:Key="FocusBrush" Color="#8875A5" />
+  <SolidColorBrush x:Key="AccentBorderBrush" Color="#BBAECD" />
+  <SolidColorBrush x:Key="InputBorderBrush" Color="#BFC3C8" />
+  <SolidColorBrush x:Key="RowHoverBrush" Color="#F0ECF5" />
+  <SolidColorBrush x:Key="TableLineBrush" Color="#E1E1E1" />
+  <SolidColorBrush x:Key="CheckBorderBrush" Color="#AD9DBF" />
+  <SolidColorBrush x:Key="DisabledBrush" Color="#D2D2D2" />
+  <SolidColorBrush x:Key="DisabledInkBrush" Color="#949494" />
+  <SolidColorBrush x:Key="ToggleOffBrush" Color="#BABEC4" />
+  <SolidColorBrush x:Key="OnAccentBrush" Color="#FFFFFF" />
+  <SolidColorBrush x:Key="CardHoverBorderBrush" Color="#B6A5CA" />
+  <SolidColorBrush x:Key="SuccessBrush" Color="#3E917F" />
+  <SolidColorBrush x:Key="ErrorBrush" Color="#C65C65" />
+  <SolidColorBrush x:Key="WarningBrush" Color="#98751E" />
+  <SolidColorBrush x:Key="PendingBrush" Color="#AC9CBD" />
+  <SolidColorBrush x:Key="DangerBrush" Color="#BE353F" />
+  <SolidColorBrush x:Key="DangerBorderBrush" Color="#EFC7CB" />
+  <SolidColorBrush x:Key="DangerSurfaceBrush" Color="#FFF6F7" />
+  <SolidColorBrush x:Key="PrimaryBrush" Color="#725C96" />
+  <SolidColorBrush x:Key="PrimaryHoverBrush" Color="#644E88" />
+  <SolidColorBrush x:Key="OnPrimaryBrush" Color="#FFFFFF" />
+</ResourceDictionary>
+
+
+
+
+
+

@@ -1,0 +1,55 @@
+<UserControl x:Class="XieBox.DiskAnalyzer.DiskView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ui="clr-namespace:XieBox.Platform.UI;assembly=XieBox.Platform.UI">
+  <UserControl.Resources>
+    <BooleanToVisibilityConverter x:Key="Visible" />
+    <Style x:Key="ShareBar" TargetType="ProgressBar">
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ProgressBar">
+        <Grid><Border x:Name="PART_Track" Background="{TemplateBinding Background}" CornerRadius="2.5" /><Border x:Name="PART_Indicator" HorizontalAlignment="Left" Background="{TemplateBinding Foreground}" CornerRadius="2.5" /></Grid>
+      </ControlTemplate></Setter.Value></Setter>
+    </Style>
+  </UserControl.Resources>
+  <Grid Margin="24,16,24,12">
+    <ScrollViewer x:Name="Setup" VerticalAlignment="Center" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Width="560" HorizontalAlignment="Center" Margin="0,24">
+        <TextBlock Text="磁盘空间分析" FontSize="34" FontWeight="SemiBold" TextAlignment="Center" />
+        <TextBlock Text="统计目录和文件大小，分析磁盘空间占用。" Style="{StaticResource MutedText}" TextAlignment="Center" Margin="0,12,0,32" />
+        <TextBlock Text="选择磁盘或目录" FontSize="13" Margin="0,0,0,8" />
+        <ui:DirectoryDropZone x:Name="DirectoryPicker" SelectedPath="{Binding Directory, Mode=TwoWay}" IsEnabled="{Binding IsIdle}" />
+        <TextBlock Text="统计所选目录及子目录的文件大小，不会修改文件。" Style="{StaticResource MutedText}" Margin="0,14,0,0" />
+        <Button Content="开始分析" Click="Scan_Click" Style="{StaticResource PrimaryButton}" Width="200" Height="54" FontSize="18" Margin="0,28,0,0" IsEnabled="{Binding IsIdle}" />
+        <TextBlock Text="{Binding Status}" Style="{StaticResource StatusText}" TextAlignment="Center" Margin="0,12,0,0" />
+      </StackPanel>
+    </ScrollViewer>
+    <Grid x:Name="Results" Visibility="Collapsed">
+      <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+      <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center"><TextBlock Text="磁盘空间分析" FontSize="22" FontWeight="SemiBold" /><TextBlock Text="{Binding Summary}" Style="{StaticResource MutedText}" VerticalAlignment="Center" Margin="16,0,0,0" /></StackPanel>
+        <StackPanel Grid.Column="1" Margin="30,0" VerticalAlignment="Center" Visibility="{Binding IsBusy, Converter={StaticResource Visible}}"><TextBlock Text="{Binding Status}" Style="{StaticResource StatusText}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" FontSize="12" Margin="0,0,0,8" /><ProgressBar Height="4" IsIndeterminate="{Binding IsBusy}" Foreground="{DynamicResource AccentInkBrush}" Background="{DynamicResource AccentBrush}" /></StackPanel>
+        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center"><Button Content="更换目录" Click="Edit_Click" Style="{StaticResource FlatButton}" IsEnabled="{Binding IsIdle}" Margin="0,0,10,0" /><Button Content="再次分析" Click="Scan_Click" Style="{StaticResource PrimaryButton}" IsEnabled="{Binding IsIdle}" /><Button Content="停止" Click="Stop_Click" Style="{StaticResource FlatButton}" Visibility="{Binding IsBusy, Converter={StaticResource Visible}}" Margin="8,0,0,0" /></StackPanel>
+      </Grid>
+      <Grid Grid.Row="1" Margin="0,10,0,8"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal"><Button Content="↑ 上一级" Click="Up_Click" IsEnabled="{Binding CanGoUp}" Padding="12,6" Margin="0,0,8,0" /><Button Content="根目录" Click="Root_Click" IsEnabled="{Binding CanGoUp}" Padding="12,6" Margin="0,0,14,0" /></StackPanel>
+        <TextBlock Grid.Column="1" Text="{Binding CurrentPath}" ToolTip="{Binding CurrentPath}" Style="{StaticResource MutedText}" VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="14,0,0,0"><Button x:Name="ListMode" Content="列表" Click="ListMode_Click" Padding="14,7" Margin="0,0,6,0" /><Button x:Name="MapMode" Content="空间图" Click="MapMode_Click" Padding="14,7" /></StackPanel>
+      </Grid>
+      <Border x:Name="MapPanel" Grid.Row="2" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1" CornerRadius="8" Padding="6">
+        <local:SpaceMap xmlns:local="clr-namespace:XieBox.DiskAnalyzer" x:Name="SpaceChart" Root="{Binding CurrentNode}" IsEnabled="{Binding IsIdle}" />
+      </Border>
+      <DataGrid Grid.Row="2" x:Name="FilesTable" ItemsSource="{Binding Entries}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="名称" Binding="{Binding Name}" Width="*" ElementStyle="{StaticResource TableText}" />
+          <DataGridTextColumn Header="类型" Binding="{Binding Kind}" Width="80" ElementStyle="{StaticResource TableText}" />
+          <DataGridTextColumn Header="文件大小" Binding="{Binding Size}" SortMemberPath="Bytes" Width="165" ElementStyle="{StaticResource TableSize}" />
+          <DataGridTemplateColumn Header="占当前目录" SortMemberPath="Share" Width="190"><DataGridTemplateColumn.CellTemplate><DataTemplate><Grid Margin="12,0"><Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="55" /></Grid.ColumnDefinitions><ProgressBar Style="{StaticResource ShareBar}" Value="{Binding Share, Mode=OneWay}" Maximum="100" Height="5" Foreground="{DynamicResource AccentInkBrush}" Background="{DynamicResource AccentBrush}" /><TextBlock Grid.Column="1" Text="{Binding ShareText}" FontSize="12" VerticalAlignment="Center" TextAlignment="Right" /></Grid></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="" Width="90"><DataGridTemplateColumn.CellTemplate><DataTemplate><Button Content="查看下级" Tag="{Binding}" Click="Enter_Click" Visibility="{Binding IsFolder, Converter={StaticResource Visible}}" Style="{StaticResource FlatButton}" Padding="0,4" FontSize="12" /></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="" Width="90"><DataGridTemplateColumn.CellTemplate><DataTemplate><Button Content="打开位置" Tag="{Binding Path}" Click="Reveal_Click" Style="{StaticResource FlatButton}" Padding="0,4" FontSize="12" /></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+      <DockPanel Grid.Row="3" Margin="0,6,0,0">
+        <TextBlock DockPanel.Dock="Right" Text="操作与统计说明 ⓘ" Style="{StaticResource MutedText}" FontSize="12" Margin="12,0,0,0"><TextBlock.ToolTip><StackPanel MaxWidth="420"><TextBlock Text="{Binding MapHint}" TextWrapping="Wrap" /><TextBlock Text="占比带 * 表示仅按已读取大小计算。多个文件入口可能重复计入，不等于实际占用或可清理空间。" TextWrapping="Wrap" Margin="0,8,0,0" /></StackPanel></TextBlock.ToolTip></TextBlock>
+        <TextBlock Text="{Binding Status}" Style="{StaticResource StatusText}" FontSize="12" TextWrapping="Wrap" />
+      </DockPanel>
+    </Grid>
+  </Grid>
+</UserControl>
+
+
